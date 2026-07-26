@@ -1,126 +1,338 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML store nepal</title>
+  <title>ML-Store Nepal</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Gideon+Roman&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<base target="_blank">
 </head>
 <body>
 
   <!-- FLOATING RANK BADGES -->
   <div class="floating-ranks">
-    <div class="floating-badge badge-1">Mythic</div>
-    <div class="floating-badge badge-2">Glory</div>
-    <div class="floating-badge badge-3">Epic</div>
-    <div class="floating-badge badge-4">Legend</div>
-    <div class="floating-badge badge-5">Immortal</div>
+    <div class="floating-badge badge-1"><img src="megacollector-badge.png" alt="badge"></div>
+    <div class="floating-badge badge-2"><img src="renowed-badge.png" alt="badge"></div>
+    <div class="floating-badge badge-3"><img src="worldcollector-badge.png" alt="badge"></div>
+    <div class="floating-badge badge-4"><img src="expert-badge.png" alt="badge"></div>
+    <div class="floating-badge badge-5"><img src="exhalted-badge.png" alt="badge"></div>
   </div>
 
   <!-- NAV -->
   <nav id="nav">
-    <div class="nav-logo">
-      <div class="nav-logo-icon">ML</div>
+    <a href="#" class="nav-logo" onclick="showPage('home'); return false;" style="text-decoration:none">
+      <div class="nav-logo-icon"></div>
       <p>ML-Store Nepal</p>
-    </div>
+    </a>
     <div class="nav-links">
-      <a href="#" class="how">How to buy</a>
-      <a href="#" class="safety">Safety</a>
+      <a href="#" class="active" onclick="showPage('home'); return false;">Home</a>
+      <a href="#" onclick="showPage('marketplace'); return false;">Marketplace</a>
+      <a href="#" onclick="showPage('how-to-buy'); return false;">How to Buy</a>
+      <a href="#" onclick="showPage('safety'); return false;">Safety</a>
     </div>
-    <button class="btn-outline-cyan" onclick="openModal()">+ List Your Account</button>
+    <div class="nav-actions" id="navAuth">
+      <!-- Auth buttons injected by JS -->
+      <button class="btn-login" onclick="showPage('login')">Login</button>
+      <button class="btn-signup" onclick="openSignupModal()">Sign Up</button>
+      <button class="btn-outline-cyan" onclick="openModal()">+ List Account</button>
+    </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-text">
-      <div class="hero-badge">🟢 Nepal's #1 MLBB Marketplace</div>
-      <h1>Welcome to <br><span>ML-Store Nepal</span></h1>
-      <p>Buy and sell premium Mobile Legends accounts.<br>Step into the championship lobby.</p>
-      <div class="hero-btns">
-        <a href="#marketplace" class="buy-btn">Browse Accounts</a>
-        <button class="btn-outline-cyan" onclick="openModal()">Sell Your Account</button>
+  <!-- ==================== HOME PAGE ==================== -->
+  <section class="page" id="page-home">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-badge">🟢 Nepal's #1 MLBB Marketplace</div>
+        <h1>Welcome to <br><span>ML-Store Nepal</span></h1>
+        <p>Buy and sell premium Mobile Legends accounts.<br>Step into the championship lobby.</p>
+        <div class="hero-btns">
+          <a href="#" class="buy-btn" onclick="showPage('marketplace'); return false;">Browse Accounts</a>
+          <button class="btn-outline-cyan" onclick="openModal()">Sell Your Account</button>
+        </div>
       </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-item">
+        <span class="stat-icon">🎮</span>
+        <div>
+          <p class="stat-label">Total Accounts</p>
+          <p class="stat-value" id="totalListings">—</p>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon" style="color:#ffd700">💎</span>
+        <div>
+          <p class="stat-label">Average Price</p>
+          <p class="stat-value gold" id="avgPrice">—</p>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon" style="color:#00ff88">🎨</span>
+        <div>
+          <p class="stat-label">Total Skins Listed</p>
+          <p class="stat-value green" id="totalSkins">—</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT US -->
+    <div class="content-backdrop">
+      <section class="about-section" id="about">
+        <h2 class="section-title">About Us</h2>
+        <div class="section-divider"></div>
+        <p>ML-Store Nepal is the premier marketplace for Mobile Legends: Bang Bang accounts in Nepal. We connect buyers and sellers in a fast, secure, and transparent environment. Whether you're looking for a Mythic Glory account with rare collector skins or want to sell your well-invested account, we've got you covered.</p>
+        <div class="trust-badges">
+          <div class="trust-badge">
+            <span class="icon">👥</span>
+            <h4>Trusted Community</h4>
+            <p>Verified buyers & sellers</p>
+          </div>
+          <div class="trust-badge">
+            <span class="icon">🛡️</span>
+            <h4>Fast & Secure</h4>
+            <p>Escrow protected deals</p>
+          </div>
+          <div class="trust-badge">
+            <span class="icon">🔍</span>
+            <h4>Transparent</h4>
+            <p>No hidden fees or tricks</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works">
+      <h2 class="section-title">How It Works</h2>
+      <div class="section-divider"></div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Select Account</h3>
+          <p>Browse our marketplace and find the perfect MLBB account that matches your playstyle and budget.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Secure Payment</h3>
+          <p>Contact the seller via WhatsApp and arrange payment through our secure escrow system.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Receive Account</h3>
+          <p>Get your account credentials via escrow. Verify everything before the seller receives payment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED ACCOUNTS -->
+    <section class="featured-section">
+      <div class="featured-header">
+        <h2>🔥 Featured Accounts</h2>
+        <a href="#" class="btn-outline-cyan" onclick="showPage('marketplace'); return false;">View All</a>
+      </div>
+      <div class="id-forsale" id="featuredGrid">
+        <div class="loading-msg">Loading featured...</div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ==================== MARKETPLACE PAGE ==================== -->
+  <section class="page hidden" id="page-marketplace">
+    <section class="page-header">
+      <h1>Marketplace <span>Lobby</span></h1>
+      <p>Browse premium Mobile Legends accounts from verified sellers across Nepal.</p>
+    </section>
+
+    <section class="game-id" id="marketplace">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Search Accounts</label>
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search by title, seller, or skins..." oninput="filterListings()">
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Min Price</label>
+          <input type="number" id="minPrice" placeholder="Rs 0" oninput="filterListings()">
+        </div>
+        <div class="filter-group">
+          <label>Max Price</label>
+          <input type="number" id="maxPrice" placeholder="Rs Any" oninput="filterListings()">
+        </div>
+        <div class="filter-group">
+          <label>Sort By</label>
+          <select id="sortBy" onchange="filterListings()">
+            <option value="newest">Newest First</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="skins_desc">Most Skins</option>
+            <option value="points_desc">Highest Points</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="id-forsale" id="listingsGrid">
+        <div class="loading-msg">Loading Lobby...</div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ==================== HOW TO BUY PAGE ==================== -->
+  <section class="page hidden" id="page-how-to-buy">
+    <section class="page-header">
+      <h1>How to <span>Buy</span></h1>
+      <p>Your step-by-step guide to purchasing a Mobile Legends account safely.</p>
+    </section>
+
+    <div class="content-backdrop">
+      <section class="guide-section">
+        <div class="guide-step">
+          <div class="guide-step-num">1</div>
+          <div>
+            <h3>Browse the Marketplace</h3>
+            <p>Visit our Marketplace page and use the filters to find accounts that match your desired rank, skin count, and budget. Each listing shows detailed info including rank, skins, points, and highlighted rare skins.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">2</div>
+          <div>
+            <h3>Contact the Seller</h3>
+            <p>Click the "Buy Now" button on any listing to open a WhatsApp chat with the seller. Discuss account details, ask for screenshots or video proof, and negotiate if needed.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">3</div>
+          <div>
+            <h3>Use Escrow for Payment</h3>
+            <p>Never send money directly. Use our escrow service or a trusted middleman. The seller provides account credentials to the escrow, and you verify the account before releasing payment.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">4</div>
+          <div>
+            <h3>Verify & Secure the Account</h3>
+            <p>Once you receive the credentials, log in immediately and change the password, bind email, and enable 2FA. Check that all promised skins and ranks are present before confirming the deal.</p>
+          </div>
+        </div>
+
+        <div class="guide-tip">
+          <h4>💡 Pro Tip</h4>
+          <p>Always ask for a screen recording of the account lobby and inventory before making any payment. If a deal seems too good to be true, it probably is. Stick to verified sellers and use escrow whenever possible.</p>
+        </div>
+      </section>
     </div>
   </section>
 
-  <!-- STATS BAR -->
-  <div class="stats-bar" id="statsBar">
-    <div class="stat-item">
-      <span class="stat-icon">🛡</span>
-      <div>
-        <p class="stat-label">Total Accounts</p>
-        <p class="stat-value" id="totalListings">—</p>
-      </div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-icon" style="color:#ffd700">⚡</span>
-      <div>
-        <p class="stat-label">Average Price</p>
-        <p class="stat-value gold" id="avgPrice">—</p>
-      </div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-icon" style="color:#00ff88">📈</span>
-      <div>
-        <p class="stat-label">Total Skins Listed</p>
-        <p class="stat-value green" id="totalSkins">—</p>
-      </div>
-    </div>
-  </div>
+  <!-- ==================== SAFETY PAGE ==================== -->
+  <section class="page hidden" id="page-safety">
+    <section class="page-header">
+      <h1>Our Safety <span>Process</span></h1>
+      <p>We prioritize your security with multiple layers of protection.</p>
+    </section>
 
-  <!-- MARKETPLACE -->
-  <section class="game-id" id="marketplace">
-    <h2 class="section-title">Marketplace Lobby</h2>
-    <div class="section-divider"></div>
+    <div class="content-backdrop">
+      <section class="safety-grid">
+        <div class="safety-card">
+          <span class="safety-icon">🛡️</span>
+          <h3>Guaranteed Escrow</h3>
+          <p>All transactions are protected by our escrow system. Your payment is held securely until you verify and confirm receipt of the account. Sellers only get paid after buyers are satisfied.</p>
+        </div>
+        <div class="safety-card">
+          <span class="safety-icon">✅</span>
+          <h3>Verified Sellers</h3>
+          <p>Every seller on our platform goes through a verification process. We check their identity, account ownership proof, and transaction history to ensure you're dealing with legitimate traders.</p>
+        </div>
+        <div class="safety-card">
+          <span class="safety-icon">🔒</span>
+          <h3>Anti-Fraud Checks</h3>
+          <p>Our system monitors listings for suspicious activity. We verify account screenshots, cross-check prices, and flag any potentially fraudulent accounts before they reach buyers.</p>
+        </div>
+      </section>
+    </div>
 
-    <!-- FILTER BAR -->
-    <div class="filter-bar">
-      <div class="filter-group">
-        <label>Search Accounts</label>
-        <div class="search-wrap">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="Search by title, seller, or skins..." oninput="filterListings()">
+    <div class="content-backdrop">
+      <section class="safety-features">
+        <div class="safety-feature-item">
+          <span class="sf-icon">📋</span>
+          <div>
+            <h4>Account Verification</h4>
+            <p>We require sellers to provide proof of account ownership including lobby screenshots, skin inventory, and match history before their listing goes live.</p>
+          </div>
+        </div>
+        <div class="safety-feature-item">
+          <span class="sf-icon">💬</span>
+          <div>
+            <h4>Direct WhatsApp Communication</h4>
+            <p>All buyer-seller communication happens through WhatsApp for transparency. This creates a clear record and allows for real-time negotiation and verification.</p>
+          </div>
+        </div>
+        <div class="safety-feature-item">
+          <span class="sf-icon">⚠️</span>
+          <div>
+            <h4>Scam Prevention Tips</h4>
+            <p>Never share your payment details outside escrow. Always verify account credentials before releasing funds. Report suspicious sellers immediately to our support team.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ==================== LOGIN PAGE ==================== -->
+  <section class="page hidden" id="page-login">
+    <section class="login-section">
+      <div class="login-card">
+        <h2>Login to ML-Store</h2>
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Email / Username</label>
+            <input type="text" name="email" placeholder="Enter your email or username" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="buy-btn">Login</button>
+        </form>
+
+        <div class="login-divider">or</div>
+
+        <div class="social-login">
+          <a href="#" class="social-btn">🔍 Google</a>
+          <a href="#" class="social-btn">📘 Facebook</a>
+        </div>
+
+        <div class="login-footer">
+          <p>Don't have an account? <a href="#" onclick="openSignupModal(); return false;">Sign Up</a></p>
+          <p style="margin-top:8px"><a href="#">Forgot Password?</a></p>
         </div>
       </div>
-      <div class="filter-group">
-        <label>Min Price</label>
-        <input type="number" id="minPrice" placeholder="Rs 0" oninput="filterListings()">
-      </div>
-      <div class="filter-group">
-        <label>Max Price</label>
-        <input type="number" id="maxPrice" placeholder="Rs Any" oninput="filterListings()">
-      </div>
-      <div class="filter-group">
-        <label>Sort By</label>
-        <select id="sortBy" onchange="filterListings()">
-          <option value="newest">Newest First</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
-          <option value="skins_desc">Most Skins</option>
-          <option value="points_desc">Highest Points</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- LISTINGS GRID -->
-    <div class="id-forsale" id="listingsGrid">
-      <div class="loading-msg">Loading Lobby...</div>
-    </div>
+    </section>
   </section>
 
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-logo">ML</div>
+    <div class="footer-links">
+      <a href="#" onclick="showPage('home'); return false;">Home</a>
+      <a href="#" onclick="showPage('marketplace'); return false;">Marketplace</a>
+      <a href="#" onclick="showPage('how-to-buy'); return false;">How to Buy</a>
+      <a href="#" onclick="showPage('safety'); return false;">Safety</a>
+    </div>
     <p>© 2025 ML-Store Nepal. All rights reserved.<br>Not affiliated with Moonton.</p>
   </footer>
 
   <!-- LIST ACCOUNT MODAL -->
-  <div id="modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event)">
+  <div id="modal-overlay" class="modal-overlay">
     <div class="modal" id="modal">
       <div class="modal-header">
         <h2>List Your Account</h2>
@@ -175,8 +387,53 @@
     </div>
   </div>
 
+  <!-- SIGNUP MODAL -->
+  <div id="signup-modal-overlay" class="modal-overlay">
+    <div class="modal" id="signup-modal">
+      <div class="modal-header">
+        <h2>Create Account</h2>
+        <button class="modal-close" onclick="closeSignupModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="fullName" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" name="email" placeholder="you@email.com" required>
+            </div>
+            <div class="form-group">
+              <label>Username *</label>
+              <input type="text" name="username" placeholder="Choose a username" required>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="text" name="phone" placeholder="+977...">
+            </div>
+            <div class="form-group">
+              <label>Password *</label>
+              <input type="password" name="password" placeholder="Min 6 characters" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label>Confirm Password *</label>
+              <input type="password" name="confirmPassword" placeholder="Repeat password" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" onclick="closeSignupModal()">Cancel</button>
+            <button type="submit" class="buy-btn" id="signupBtn">Create Account</button>
+          </div>
+        </form>
+        <div class="login-footer" style="margin-top:16px;">
+          <p>Already have an account? <a href="#" onclick="closeSignupModal(); showPage('login'); return false;">Login</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
-
-
