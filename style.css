@@ -48,7 +48,7 @@ body {
 
 .floating-badge {
 	position: absolute;
-	bottom: -150px;
+	bottom: -250px;
 	animation: floatUp linear infinite;
 	display: flex;
 	align-items: center;
@@ -59,6 +59,7 @@ body {
 	text-align: center;
 	color: white;
 	text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+	opacity: 0;
 }
 
 .badge-1 { width:80px; height:80px; left:10%; animation-duration:15s; animation-delay:0s; background:radial-gradient(circle,rgba(255,215,0,0.4) 0%,transparent 70%); border:1px solid rgba(255,215,0,0.2); }
@@ -69,9 +70,9 @@ body {
 
 @keyframes floatUp {
 	0%   { transform: translateY(0) scale(0.5) rotate(0deg); opacity:0; }
-	10%  { opacity: 0.5; }
-	90%  { opacity: 0.5; }
-	100% { transform: translateY(-120vh) scale(1) rotate(360deg); opacity:0; }
+	15%  { opacity: 0.6; }
+	85%  { opacity: 0.6; }
+	100% { transform: translateY(-130vh) scale(1) rotate(360deg); opacity:0; }
 }
 
 /* ========== NAV ========== */
