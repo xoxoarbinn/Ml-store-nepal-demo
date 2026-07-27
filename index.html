@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML-Store Nepal</title>
-  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Gideon+Roman&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-<base target="_blank">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <base target="_blank">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <base target="_blank">
 </head>
 <body>
 
@@ -24,7 +26,13 @@
   <!-- NAV -->
   <nav id="nav">
     <a href="#" class="nav-logo" onclick="showPage('home'); return false;" style="text-decoration:none">
-      <div class="nav-logo-icon">ML</div>
+      <div class="nav-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
       <p>ML-Store Nepal</p>
     </a>
     <div class="nav-links">
@@ -34,46 +42,59 @@
       <a href="#" onclick="showPage('safety'); return false;">Safety</a>
     </div>
     <div class="nav-actions" id="navAuth">
-      <!-- Auth buttons injected by JS -->
       <button class="btn-login" onclick="showPage('login')">Login</button>
       <button class="btn-signup" onclick="openSignupModal()">Sign Up</button>
-      <button class="btn-outline-cyan" onclick="openModal()">+ List Account</button>
+      <button class="btn-outline-accent" onclick="checkAuthThen(() => openModal())">+ List Account</button>
     </div>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="showPage('home'); closeMobileMenu(); return false;">Home</a>
+    <a href="#" onclick="showPage('marketplace'); closeMobileMenu(); return false;">Marketplace</a>
+    <a href="#" onclick="showPage('how-to-buy'); closeMobileMenu(); return false;">How to Buy</a>
+    <a href="#" onclick="showPage('safety'); closeMobileMenu(); return false;">Safety</a>
+    <div class="mobile-menu-divider"></div>
+    <button class="btn-signup" onclick="showPage('login'); closeMobileMenu();">Login</button>
+    <button class="btn-outline-accent" onclick="checkAuthThen(() => { openModal(); closeMobileMenu(); })">+ List Account</button>
+  </div>
 
   <!-- ==================== HOME PAGE ==================== -->
   <section class="page" id="page-home">
-    <!-- HERO -->
     <section class="hero">
       <div class="hero-text">
-        <div class="hero-badge">🟢 Nepal's #1 MLBB Marketplace</div>
+        <div class="hero-badge">
+          <span class="dot"></span> Nepal's #1 MLBB Marketplace
+        </div>
         <h1>Welcome to <br><span>ML-Store Nepal</span></h1>
         <p>Buy and sell premium Mobile Legends accounts.<br>Step into the championship lobby.</p>
         <div class="hero-btns">
           <a href="#" class="buy-btn" onclick="showPage('marketplace'); return false;">Browse Accounts</a>
-          <button class="btn-outline-cyan" onclick="openModal()">Sell Your Account</button>
+          <button class="btn-outline-accent" onclick="checkAuthThen(() => openModal())">Sell Your Account</button>
         </div>
       </div>
     </section>
 
-    <!-- STATS BAR -->
     <div class="stats-bar" id="statsBar">
       <div class="stat-item">
-        <span class="stat-icon">🎮</span>
+        <div class="stat-icon-wrap"><i class="fa-solid fa-gamepad"></i></div>
         <div>
           <p class="stat-label">Total Accounts</p>
           <p class="stat-value" id="totalListings">—</p>
         </div>
       </div>
       <div class="stat-item">
-        <span class="stat-icon" style="color:#ffd700">💎</span>
+        <div class="stat-icon-wrap gold"><i class="fa-solid fa-gem"></i></div>
         <div>
           <p class="stat-label">Average Price</p>
           <p class="stat-value gold" id="avgPrice">—</p>
         </div>
       </div>
       <div class="stat-item">
-        <span class="stat-icon" style="color:#00ff88">🎨</span>
+        <div class="stat-icon-wrap green"><i class="fa-solid fa-palette"></i></div>
         <div>
           <p class="stat-label">Total Skins Listed</p>
           <p class="stat-value green" id="totalSkins">—</p>
@@ -81,7 +102,6 @@
       </div>
     </div>
 
-    <!-- ABOUT US -->
     <div class="content-backdrop">
       <section class="about-section" id="about">
         <h2 class="section-title">About Us</h2>
@@ -89,17 +109,17 @@
         <p>ML-Store Nepal is the premier marketplace for Mobile Legends: Bang Bang accounts in Nepal. We connect buyers and sellers in a fast, secure, and transparent environment. Whether you're looking for a Mythic Glory account with rare collector skins or want to sell your well-invested account, we've got you covered.</p>
         <div class="trust-badges">
           <div class="trust-badge">
-            <span class="icon">👥</span>
+            <span class="icon"><i class="fa-solid fa-users"></i></span>
             <h4>Trusted Community</h4>
             <p>Verified buyers & sellers</p>
           </div>
           <div class="trust-badge">
-            <span class="icon">🛡️</span>
+            <span class="icon"><i class="fa-solid fa-shield-halved"></i></span>
             <h4>Fast & Secure</h4>
             <p>Escrow protected deals</p>
           </div>
           <div class="trust-badge">
-            <span class="icon">🔍</span>
+            <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
             <h4>Transparent</h4>
             <p>No hidden fees or tricks</p>
           </div>
@@ -107,7 +127,6 @@
       </section>
     </div>
 
-    <!-- HOW IT WORKS -->
     <section class="how-it-works">
       <h2 class="section-title">How It Works</h2>
       <div class="section-divider"></div>
@@ -130,11 +149,10 @@
       </div>
     </section>
 
-    <!-- FEATURED ACCOUNTS -->
     <section class="featured-section">
       <div class="featured-header">
         <h2>🔥 Featured Accounts</h2>
-        <a href="#" class="btn-outline-cyan" onclick="showPage('marketplace'); return false;">View All</a>
+        <a href="#" class="btn-outline-accent" onclick="showPage('marketplace'); return false;">View All</a>
       </div>
       <div class="id-forsale" id="featuredGrid">
         <div class="loading-msg">Loading featured...</div>
@@ -151,10 +169,10 @@
 
     <section class="game-id" id="marketplace">
       <div class="filter-bar">
-        <div class="filter-group">
+        <div class="filter-group search-group">
           <label>Search Accounts</label>
           <div class="search-wrap">
-            <span class="search-icon">🔍</span>
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input type="text" id="searchInput" placeholder="Search by title, seller, or skins..." oninput="filterListings()">
           </div>
         </div>
@@ -174,7 +192,12 @@
             <option value="price_desc">Price: High to Low</option>
             <option value="skins_desc">Most Skins</option>
             <option value="points_desc">Highest Points</option>
+            <option value="views_desc">Most Viewed</option>
           </select>
+        </div>
+        <div class="filter-group">
+          <label>Filter by Skin</label>
+          <input type="text" id="skinFilter" placeholder="e.g. KOF, Legend..." oninput="filterListings()">
         </div>
       </div>
 
@@ -200,7 +223,6 @@
             <p>Visit our Marketplace page and use the filters to find accounts that match your desired rank, skin count, and budget. Each listing shows detailed info including rank, skins, points, and highlighted rare skins.</p>
           </div>
         </div>
-
         <div class="guide-step">
           <div class="guide-step-num">2</div>
           <div>
@@ -208,7 +230,6 @@
             <p>Click the "Buy Now" button on any listing to open a WhatsApp chat with the seller. Discuss account details, ask for screenshots or video proof, and negotiate if needed.</p>
           </div>
         </div>
-
         <div class="guide-step">
           <div class="guide-step-num">3</div>
           <div>
@@ -216,7 +237,6 @@
             <p>Never send money directly. Use our escrow service or a trusted middleman. The seller provides account credentials to the escrow, and you verify the account before releasing payment.</p>
           </div>
         </div>
-
         <div class="guide-step">
           <div class="guide-step-num">4</div>
           <div>
@@ -224,7 +244,6 @@
             <p>Once you receive the credentials, log in immediately and change the password, bind email, and enable 2FA. Check that all promised skins and ranks are present before confirming the deal.</p>
           </div>
         </div>
-
         <div class="guide-tip">
           <h4>💡 Pro Tip</h4>
           <p>Always ask for a screen recording of the account lobby and inventory before making any payment. If a deal seems too good to be true, it probably is. Stick to verified sellers and use escrow whenever possible.</p>
@@ -243,17 +262,17 @@
     <div class="content-backdrop">
       <section class="safety-grid">
         <div class="safety-card">
-          <span class="safety-icon">🛡️</span>
+          <span class="safety-icon"><i class="fa-solid fa-shield-halved"></i></span>
           <h3>Guaranteed Escrow</h3>
           <p>All transactions are protected by our escrow system. Your payment is held securely until you verify and confirm receipt of the account. Sellers only get paid after buyers are satisfied.</p>
         </div>
         <div class="safety-card">
-          <span class="safety-icon">✅</span>
+          <span class="safety-icon"><i class="fa-solid fa-circle-check"></i></span>
           <h3>Verified Sellers</h3>
           <p>Every seller on our platform goes through a verification process. We check their identity, account ownership proof, and transaction history to ensure you're dealing with legitimate traders.</p>
         </div>
         <div class="safety-card">
-          <span class="safety-icon">🔒</span>
+          <span class="safety-icon"><i class="fa-solid fa-lock"></i></span>
           <h3>Anti-Fraud Checks</h3>
           <p>Our system monitors listings for suspicious activity. We verify account screenshots, cross-check prices, and flag any potentially fraudulent accounts before they reach buyers.</p>
         </div>
@@ -263,21 +282,21 @@
     <div class="content-backdrop">
       <section class="safety-features">
         <div class="safety-feature-item">
-          <span class="sf-icon">📋</span>
+          <span class="sf-icon"><i class="fa-solid fa-clipboard-check"></i></span>
           <div>
             <h4>Account Verification</h4>
             <p>We require sellers to provide proof of account ownership including lobby screenshots, skin inventory, and match history before their listing goes live.</p>
           </div>
         </div>
         <div class="safety-feature-item">
-          <span class="sf-icon">💬</span>
+          <span class="sf-icon"><i class="fa-solid fa-comments"></i></span>
           <div>
             <h4>Direct WhatsApp Communication</h4>
             <p>All buyer-seller communication happens through WhatsApp for transparency. This creates a clear record and allows for real-time negotiation and verification.</p>
           </div>
         </div>
         <div class="safety-feature-item">
-          <span class="sf-icon">⚠️</span>
+          <span class="sf-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
           <div>
             <h4>Scam Prevention Tips</h4>
             <p>Never share your payment details outside escrow. Always verify account credentials before releasing funds. Report suspicious sellers immediately to our support team.</p>
@@ -303,32 +322,194 @@
           </div>
           <button type="submit" class="buy-btn">Login</button>
         </form>
-
         <div class="login-divider">or</div>
-
         <div class="social-login">
-          <a href="#" class="social-btn">🔍 Google</a>
-          <a href="#" class="social-btn">📘 Facebook</a>
+          <button type="button" class="social-btn" onclick="socialLogin('google')">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+          <button type="button" class="social-btn" onclick="socialLogin('facebook')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </button>
         </div>
-
         <div class="login-footer">
           <p>Don't have an account? <a href="#" onclick="openSignupModal(); return false;">Sign Up</a></p>
-          <p style="margin-top:8px"><a href="#">Forgot Password?</a></p>
+          <p style="margin-top:8px"><a href="#" onclick="forgotPassword(); return false;">Forgot Password?</a></p>
         </div>
       </div>
     </section>
   </section>
 
+  <!-- ==================== WISHLIST PAGE ==================== -->
+  <section class="page hidden" id="page-wishlist">
+    <section class="page-header">
+      <h1>My <span>Wishlist</span></h1>
+      <p>Accounts you've saved for later.</p>
+    </section>
+    <section class="game-id">
+      <div class="id-forsale" id="wishlistGrid">
+        <div class="loading-msg">Loading your wishlist...</div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ==================== MY LISTINGS PAGE ==================== -->
+  <section class="page hidden" id="page-my-listings">
+    <section class="page-header">
+      <h1>My <span>Listings</span></h1>
+      <p>Manage your account listings.</p>
+    </section>
+    <section class="game-id">
+      <div class="id-forsale" id="myListingsGrid">
+        <div class="loading-msg">Loading your listings...</div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ==================== PROFILE PAGE ==================== -->
+  <section class="page hidden" id="page-profile">
+    <section class="page-header">
+      <h1>My <span>Profile</span></h1>
+      <p>Manage your account settings and preferences.</p>
+    </section>
+
+    <div class="content-backdrop">
+      <section class="profile-section">
+        <div class="profile-card">
+          <div class="profile-avatar" id="profileAvatar">U</div>
+          <div class="profile-info">
+            <h3 id="profileName">User</h3>
+            <p id="profileEmail">user@email.com</p>
+            <p id="profileUsername" style="color: var(--text-muted); font-size: 13px;">@username</p>
+          </div>
+        </div>
+
+        <div class="profile-tabs">
+          <button class="profile-tab active" onclick="switchProfileTab('edit')">Edit Profile</button>
+          <button class="profile-tab" onclick="switchProfileTab('password')">Change Password</button>
+          <button class="profile-tab" onclick="switchProfileTab('danger')">Danger Zone</button>
+        </div>
+
+        <!-- Edit Profile Tab -->
+        <div class="profile-tab-content" id="tab-edit">
+          <form onsubmit="updateProfile(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="editFullName" placeholder="Your full name">
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="editUsername" placeholder="Your username">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editEmail" placeholder="your@email.com" readonly style="opacity: 0.6;">
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="editPhone" placeholder="+977...">
+              </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px;">
+              <button type="submit" class="buy-btn">Save Changes</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Change Password Tab -->
+        <div class="profile-tab-content hidden" id="tab-password">
+          <form onsubmit="changePassword(event)">
+            <div class="form-group full">
+              <label>Current Password</label>
+              <input type="password" id="currentPassword" placeholder="Enter current password" required>
+            </div>
+            <div class="form-group full">
+              <label>New Password</label>
+              <input type="password" id="newPassword" placeholder="Min 6 characters" minlength="6" required>
+            </div>
+            <div class="form-group full">
+              <label>Confirm New Password</label>
+              <input type="password" id="confirmNewPassword" placeholder="Repeat new password" required>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px;">
+              <button type="submit" class="buy-btn">Update Password</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Danger Zone Tab -->
+        <div class="profile-tab-content hidden" id="tab-danger">
+          <div class="danger-zone">
+            <div class="danger-item">
+              <div>
+                <h4>Delete All My Listings</h4>
+                <p>This will permanently remove all accounts you've listed for sale.</p>
+              </div>
+              <button class="btn-cancel" style="border-color: var(--red); color: var(--red);" onclick="deleteAllMyListings()">Delete All</button>
+            </div>
+            <div class="danger-item">
+              <div>
+                <h4>Delete Account</h4>
+                <p>This will permanently delete your account and all associated data.</p>
+              </div>
+              <button class="btn-cancel" style="border-color: var(--red); color: var(--red);" onclick="deleteAccount()">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-logo">ML</div>
-    <div class="footer-links">
-      <a href="#" onclick="showPage('home'); return false;">Home</a>
-      <a href="#" onclick="showPage('marketplace'); return false;">Marketplace</a>
-      <a href="#" onclick="showPage('how-to-buy'); return false;">How to Buy</a>
-      <a href="#" onclick="showPage('safety'); return false;">Safety</a>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-wrap">
+          <div class="footer-logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h3>ML-Store Nepal</h3>
+            <p>Premium MLBB Account Marketplace</p>
+          </div>
+        </div>
+        <p class="footer-desc">Nepal's most trusted platform for buying and selling Mobile Legends: Bang Bang accounts. Secure escrow, verified sellers, and transparent deals.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Discord"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-links-col">
+        <h4>Platform</h4>
+        <a href="#" onclick="showPage('home'); return false;">Home</a>
+        <a href="#" onclick="showPage('marketplace'); return false;">Marketplace</a>
+        <a href="#" onclick="showPage('how-to-buy'); return false;">How to Buy</a>
+        <a href="#" onclick="showPage('safety'); return false;">Safety</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Support</h4>
+        <a href="#" onclick="showPage('safety'); return false;">Escrow Guide</a>
+        <a href="#" onclick="showPage('how-to-buy'); return false;">Buying Guide</a>
+        <a href="#" onclick="alert('Contact: support@mlstore.np'); return false;">Contact Us</a>
+        <a href="#" onclick="alert('Report a scam or suspicious listing'); return false;">Report Issue</a>
+      </div>
+      <div class="footer-links-col">
+        <h4>Legal</h4>
+        <a href="#" onclick="alert('Terms of Service coming soon'); return false;">Terms of Service</a>
+        <a href="#" onclick="alert('Privacy Policy coming soon'); return false;">Privacy Policy</a>
+        <a href="#" onclick="alert('Refund Policy coming soon'); return false;">Refund Policy</a>
+      </div>
     </div>
-    <p>© 2025 ML-Store Nepal. All rights reserved.<br>Not affiliated with Moonton.</p>
+    <div class="footer-bottom">
+      <p>© 2025 ML-Store Nepal. All rights reserved. Not affiliated with Moonton.</p>
+    </div>
   </footer>
 
   <!-- LIST ACCOUNT MODAL -->
@@ -336,7 +517,7 @@
     <div class="modal" id="modal">
       <div class="modal-header">
         <h2>List Your Account</h2>
-        <button class="modal-close" onclick="closeModal()">✕</button>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
         <form id="listingForm" onsubmit="submitListing(event)">
@@ -370,8 +551,15 @@
               <input type="number" name="points" placeholder="e.g. 82000" min="0" required>
             </div>
             <div class="form-group">
-              <label>Image URL (optional)</label>
-              <input type="url" name="imageUrl" placeholder="https://...">
+              <label>Account Image</label>
+              <div class="file-upload-wrap">
+                <input type="file" id="listingImage" name="listingImage" accept="image/*" onchange="handleImagePreview(this)">
+                <label for="listingImage" class="file-upload-label">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  <span id="fileLabelText">Choose an image...</span>
+                </label>
+              </div>
+              <div class="image-preview" id="imagePreview"></div>
             </div>
           </div>
           <div class="form-group full">
@@ -392,7 +580,7 @@
     <div class="modal" id="signup-modal">
       <div class="modal-header">
         <h2>Create Account</h2>
-        <button class="modal-close" onclick="closeSignupModal()">✕</button>
+        <button class="modal-close" onclick="closeSignupModal()" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
         <form id="signupForm" onsubmit="handleSignup(event)">
@@ -432,6 +620,40 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- AUTH REQUIRED MODAL -->
+  <div id="auth-modal-overlay" class="modal-overlay">
+    <div class="modal auth-modal">
+      <div class="modal-header">
+        <h2>Authentication Required</h2>
+        <button class="modal-close" onclick="closeAuthModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" style="text-align:center; padding: 40px 24px;">
+        <div class="auth-modal-icon">🔒</div>
+        <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Login Required</h3>
+        <p style="color: #aaa; margin-bottom: 28px; line-height: 1.6;">You need to be logged in to buy or sell accounts on ML-Store Nepal. Join our community of trusted traders today.</p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="buy-btn" onclick="closeAuthModal(); showPage('login');">Login</button>
+          <button class="btn-outline-accent" onclick="closeAuthModal(); openSignupModal();">Create Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTING DETAIL MODAL -->
+  <div id="detail-modal-overlay" class="modal-overlay">
+    <div class="modal" id="detail-modal">
+      <div class="modal-body" id="detail-modal-content">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Notification</span>
   </div>
 
   <script src="script.js"></script>
