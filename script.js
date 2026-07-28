@@ -14,10 +14,10 @@ let currentImageBase64 = null;
 // =============================================
 function escapeHtml(str) {
   return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;');
 }
 
 function sanitizePhone(phone) {
@@ -92,7 +92,7 @@ function initStorage() {
       const users = JSON.parse(localStorage.getItem('ml_users') || '[]');
       const seller = users.find(u => 
         u.fullName === l.sellerName || u.username === l.sellerName
-      );
+        );
       l.sellerEmail = seller ? seller.email : 'unknown@mlstore.np';
       migrated = true;
     }
@@ -112,13 +112,11 @@ function initStorage() {
 //  SPA PAGE SWITCHING
 // =============================================
 function showPage(pageName) {
-  document.querySelectorAll('.page').forEach(page => {
-    page.classList.add('hidden');
-  });
+  const currentPage = document.querySelector('.page:not(.hidden)');
   const target = document.getElementById('page-' + pageName);
-  if (target) {
-    target.classList.remove('hidden');
-  }
+  if (!target || currentPage === target) return;
+
+  // Update active nav link
   document.querySelectorAll('.nav-links a').forEach(link => {
     link.classList.remove('active');
     const onclick = link.getAttribute('onclick') || '';
@@ -126,6 +124,66 @@ function showPage(pageName) {
       link.classList.add('active');
     }
   });
+
+  // Update sliding underline position
+  const activeLink = document.querySelector('.nav-links a.active');
+  const underline = document.querySelector('.nav-underline');
+  if (activeLink && underline) {
+    underline.style.width = activeLink.offsetWidth + 'px';
+    underline.style.left = activeLink.offsetLeft + 'px';
+  }
+
+  // Smooth page transition
+  if (currentPage) {
+    // Fade out current page
+    currentPage.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    currentPage.style.opacity = '0';
+    currentPage.style.transform = 'translateY(8px)';
+
+    setTimeout(() => {
+      currentPage.classList.add('hidden');
+      currentPage.style.transition = '';
+      currentPage.style.opacity = '';
+      currentPage.style.transform = '';
+
+      // Prepare next page (hidden but positioned for entrance)
+      target.classList.remove('hidden');
+      target.style.opacity = '0';
+      target.style.transform = 'translateY(12px)';
+
+      // Force reflow then animate in with rAF
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          target.style.transition = 'opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+          target.style.opacity = '1';
+          target.style.transform = 'translateY(0)';
+
+          setTimeout(() => {
+            target.style.transition = '';
+            target.style.opacity = '';
+            target.style.transform = '';
+          }, 350);
+        });
+      });
+    }, 250);
+  } else {
+    target.classList.remove('hidden');
+    target.style.opacity = '0';
+    target.style.transform = 'translateY(12px)';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        target.style.transition = 'opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+        target.style.opacity = '1';
+        target.style.transform = 'translateY(0)';
+        setTimeout(() => {
+          target.style.transition = '';
+          target.style.opacity = '';
+          target.style.transform = '';
+        }, 350);
+      });
+    });
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (pageName === 'marketplace') loadListings();
@@ -134,6 +192,7 @@ function showPage(pageName) {
   if (pageName === 'profile') loadProfile();
   if (pageName === 'wishlist') loadWishlist();
 }
+
 
 // =============================================
 //  MOBILE MENU
@@ -185,26 +244,26 @@ function updateNavAuth() {
 
   if (user && user.loggedIn) {
     const initials = user.fullName
-      ? user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-      : (user.username ? user.username.slice(0, 2).toUpperCase() : 'U');
+    ? user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : (user.username ? user.username.slice(0, 2).toUpperCase() : 'U');
     const displayName = user.fullName || user.username || (user.email ? user.email.split('@')[0] : 'User');
 
     container.innerHTML = `
       <div class="user-profile" id="userProfile" onclick="toggleDropdown(event)">
-        <div class="user-avatar">${initials}</div>
-        <span class="user-name">${escapeHtml(displayName)}</span>
-        <span style="color:#64748b; font-size:11px;">▼</span>
-        <div class="user-dropdown" id="userDropdown">
-          <button class="dropdown-item" onclick="showPage('home'); closeDropdown();">🏠 Home</button>
-          <button class="dropdown-item" onclick="showPage('marketplace'); closeDropdown();">🛒 Marketplace</button>
-          <button class="dropdown-item" onclick="showPage('wishlist'); closeDropdown();">❤️ Wishlist</button>
-          <button class="dropdown-item" onclick="showPage('my-listings'); closeDropdown();">📋 My Listings</button>
-          <div class="dropdown-divider"></div>
-          <button class="dropdown-item" onclick="showPage('profile'); closeDropdown();">⚙️ Profile Settings</button>
-          <button class="dropdown-item" onclick="handleLogout(); closeDropdown();">🚪 Logout</button>
-        </div>
+      <div class="user-avatar">${initials}</div>
+      <span class="user-name">${escapeHtml(displayName)}</span>
+      <span style="color:#64748b; font-size:11px;"><i class="fa-solid fa-chevron-down"></i></span>
+      <div class="user-dropdown" id="userDropdown">
+        <button class="dropdown-item" onclick="showPage('home'); closeDropdown();"><i class="fa-solid fa-house"></i> Home</button>
+        <button class="dropdown-item" onclick="showPage('marketplace'); closeDropdown();"><i class="fa-solid fa-cart-shopping"></i> Marketplace</button>
+        <button class="dropdown-item" onclick="showPage('wishlist'); closeDropdown();"><i class="fa-solid fa-heart"></i> Wishlist</button>
+        <button class="dropdown-item" onclick="showPage('my-listings'); closeDropdown();"><i class="fa-solid fa-clipboard-list"></i> My Listings</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" onclick="showPage('profile'); closeDropdown();"><i class="fa-solid fa-gear"></i> Profile Settings</button>
+        <button class="dropdown-item" onclick="handleLogout(); closeDropdown();"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
       </div>
-      <button class="btn-outline-accent" onclick="checkAuthThen(() => openModal())">+ List Account</button>
+    </div>
+    <button class="btn-outline-accent" onclick="checkAuthThen(() => openModal())"><i class="fa-solid fa-plus"></i> List Account</button>
     `;
 
     if (mobileMenu) {
@@ -257,7 +316,7 @@ document.addEventListener('click', () => closeDropdown());
 function handleLogout() {
   localStorage.removeItem('ml_user');
   updateNavAuth();
-  showToast('👋 Logged out successfully', 'info');
+  showToast('<i class="fa-solid fa-right-from-bracket"></i> Logged out successfully', 'info');
   showPage('home');
 }
 
@@ -290,15 +349,15 @@ function showToast(message, type = 'success') {
   if (!toast) return;
 
   const icons = {
-    success: '✅',
-    error: '❌',
-    info: 'ℹ️',
-    warning: '⚠️',
-    heart: '❤️'
+    success: 'fa-solid fa-circle-check',
+    error: 'fa-solid fa-circle-xmark',
+    info: 'fa-solid fa-circle-info',
+    warning: 'fa-solid fa-triangle-exclamation',
+    heart: 'fa-solid fa-heart'
   };
 
-  icon.textContent = icons[type] || icons.success;
-  msg.textContent = message;
+  icon.innerHTML = `<i class="${icons[type] || icons.success}"></i>`;
+  msg.innerHTML = message;
   toast.classList.add('show');
 
   setTimeout(() => {
@@ -446,7 +505,7 @@ function loadFeatured() {
         <h3>No Accounts Yet</h3>
         <p>Be the first to list an account!</p>
         <button class="btn-outline-accent" onclick="checkAuthThen(() => openModal())">List Account</button>
-      </div>`;
+    </div>`;
     return;
   }
   grid.innerHTML = featured.map(l => renderCard(l)).join('');
@@ -472,7 +531,7 @@ function toggleFavorite(listingId, event) {
     showToast('Removed from wishlist', 'info');
   } else {
     favorites.push(listingId);
-    showToast('Added to wishlist ❤️', 'heart');
+    showToast('Added to wishlist');
   }
   localStorage.setItem('ml_favorites', JSON.stringify(favorites));
   // Refresh any visible grids
@@ -513,7 +572,7 @@ function loadWishlist() {
         <h3>Your Wishlist is Empty</h3>
         <p>Save accounts you like by clicking the heart icon on any listing.</p>
         <button class="btn-outline-accent" onclick="showPage('marketplace')" style="margin-top: 12px;">Browse Marketplace</button>
-      </div>`;
+    </div>`;
     return;
   }
   grid.innerHTML = listings.map(l => renderCard(l)).join('');
@@ -592,7 +651,7 @@ function loadMyListings() {
         <h3>No Listings Yet</h3>
         <p>You haven't listed any accounts for sale. Start selling today!</p>
         <button class="btn-outline-accent" onclick="openModal()" style="margin-top: 12px;">List Your First Account</button>
-      </div>`;
+    </div>`;
     return;
   }
   grid.innerHTML = listings.map(l => renderMyListingCard(l)).join('');
@@ -674,22 +733,22 @@ function filterListings() {
   let filtered = allListings.filter(l => {
     if (l.status === 'sold') return false;
     const matchSearch = !search ||
-      (l.title && l.title.toLowerCase().includes(search)) ||
-      (l.sellerName && l.sellerName.toLowerCase().includes(search)) ||
-      (l.highlightSkins && l.highlightSkins.toLowerCase().includes(search));
+    (l.title && l.title.toLowerCase().includes(search)) ||
+    (l.sellerName && l.sellerName.toLowerCase().includes(search)) ||
+    (l.highlightSkins && l.highlightSkins.toLowerCase().includes(search));
     const matchPrice = l.price >= minPrice && l.price <= maxPrice;
     const matchSkin = !skinFilter ||
-      (l.highlightSkins && l.highlightSkins.toLowerCase().includes(skinFilter));
+    (l.highlightSkins && l.highlightSkins.toLowerCase().includes(skinFilter));
     return matchSearch && matchPrice && matchSkin;
   });
 
   switch (sortBy) {
-    case 'price_asc':    filtered.sort((a, b) => a.price - b.price); break;
-    case 'price_desc':   filtered.sort((a, b) => b.price - a.price); break;
-    case 'skins_desc':   filtered.sort((a, b) => (b.skinsCount || 0) - (a.skinsCount || 0)); break;
-    case 'points_desc':  filtered.sort((a, b) => (b.points || 0) - (a.points || 0)); break;
-    case 'views_desc':   filtered.sort((a, b) => (b.views || 0) - (a.views || 0)); break;
-    default:             filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)); break;
+  case 'price_asc':    filtered.sort((a, b) => a.price - b.price); break;
+  case 'price_desc':   filtered.sort((a, b) => b.price - a.price); break;
+  case 'skins_desc':   filtered.sort((a, b) => (b.skinsCount || 0) - (a.skinsCount || 0)); break;
+  case 'points_desc':  filtered.sort((a, b) => (b.points || 0) - (a.points || 0)); break;
+  case 'views_desc':   filtered.sort((a, b) => (b.views || 0) - (a.views || 0)); break;
+  default:             filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)); break;
   }
 
   renderListings(filtered);
@@ -705,7 +764,7 @@ function renderListings(listings) {
         <h3>No Accounts Found</h3>
         <p>Try adjusting your filters or search term.</p>
         <button class="btn-outline-accent" onclick="clearFilters()">Clear Filters</button>
-      </div>`;
+    </div>`;
     return;
   }
   grid.innerHTML = listings.map(l => renderCard(l)).join('');
@@ -716,16 +775,16 @@ function renderListings(listings) {
 // =============================================
 function renderCard(l) {
   const imageHtml = l.imageUrl
-    ? `<img class="card-image" src="${l.imageUrl}" alt="${escapeHtml(l.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="card-image-placeholder" style="display:none;">⚔️</div>`
-    : `<div class="card-image-placeholder">⚔️</div>`;
+  ? `<img class="card-image" src="${l.imageUrl}" alt="${escapeHtml(l.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="card-image-placeholder" style="display:none;"><i class="fa-solid fa-shield-halved"></i></div>`
+  : `<div class="card-image-placeholder"><i class="fa-solid fa-shield-halved"></i></div>`;
 
-  const starsHtml = l.stars ? `<span>⭐ ${l.stars} Stars</span>` : '';
+  const starsHtml = l.stars ? `<span><i class="fa-solid fa-star"></i> ${l.stars} Stars</span>` : '';
   const favClass = isFavorited(l.id) ? 'favorited' : '';
-  const favIcon = isFavorited(l.id) ? '❤️' : '🤍';
+  const favIcon = isFavorited(l.id) ? '<i class="fa-solid fa-heart"></i>' : '<i class="fa-regular fa-heart"></i>';
   const reported = hasUserReported(l.id);
-  const reportText = reported ? '✓ Reported' : '🚩 Report';
-  const priceDropBadge = hasPriceDropped(l) ? `<span class="price-drop-badge">📉 Price Drop</span>` : '';
-  const viewsHtml = l.views ? `<span class="view-count">👁 ${l.views}</span>` : '';
+  const reportText = reported ? '<i class="fa-solid fa-check"></i> Reported' : '<i class="fa-solid fa-flag"></i> Report';
+  const priceDropBadge = hasPriceDropped(l) ? `<span class="price-drop-badge"><i class="fa-solid fa-arrow-trend-down"></i> Price Drop</span>` : '';
+  const viewsHtml = l.views ? `<span class="view-count"><i class="fa-solid fa-eye"></i> ${l.views}</span>` : '';
 
   return `
     <div class="account-card" onclick="openListingDetail(${l.id})">
@@ -738,11 +797,11 @@ function renderCard(l) {
       </div>
       <div class="card-info">
         <h3>${escapeHtml(l.title)}</h3>
-        <p class="seller-name">🛡 Seller: ${escapeHtml(l.sellerName)}</p>
+        <p class="seller-name"><i class="fa-solid fa-shield-halved"></i> Seller: ${escapeHtml(l.sellerName)}</p>
         <div class="stats">
           ${starsHtml}
-          <span>🎨 ${l.skinsCount} Skins</span>
-          <span>🏆 ${(l.points || 0).toLocaleString()} pts</span>
+          <span><i class="fa-solid fa-palette"></i> ${l.skinsCount} Skins</span>
+          <span><i class="fa-solid fa-trophy"></i> ${(l.points || 0).toLocaleString()} pts</span>
           ${viewsHtml}
         </div>
         <p class="highlight-skins">${escapeHtml(l.highlightSkins).split(',').map(s => s.trim()).join(' • ')}</p>
@@ -762,30 +821,31 @@ function renderCard(l) {
       </div>
     </div>
   `;
-}
+}  // ← closing brace moved to AFTER the return
 
 function renderMyListingCard(l) {
   const imageHtml = l.imageUrl
-    ? `<img class="card-image" src="${l.imageUrl}" alt="${escapeHtml(l.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="card-image-placeholder" style="display:none;">⚔️</div>`
-    : `<div class="card-image-placeholder">⚔️</div>`;
+  ? `<img class="card-image" src="${l.imageUrl}" alt="${escapeHtml(l.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="card-image-placeholder" style="display:none;"><i class="fa-solid fa-shield-halved"></i></div>`
+  : `<div class="card-image-placeholder"><i class="fa-solid fa-shield-halved"></i></div>`;
 
-  const starsHtml = l.stars ? `<span>⭐ ${l.stars} Stars</span>` : '';
+  const starsHtml = l.stars ? `<span><i class="fa-solid fa-star"></i> ${l.stars} Stars</span>` : '';
   const dateStr = formatDate(l.createdAt);
   const statusBadge = l.status === 'sold' 
-    ? `<span class="status-badge sold">SOLD</span>` 
-    : `<span class="status-badge active">ACTIVE</span>`;
+  ? `<span class="status-badge sold">SOLD</span>` 
+  : `<span class="status-badge active">ACTIVE</span>`;
   const statusBtn = l.status === 'sold'
-    ? `<button class="btn-outline-accent" style="padding: 8px 16px; font-size: 12px;" onclick="reactivateListing(${l.id})">🔄 Reactivate</button>`
-    : `<button class="btn-outline-accent" style="padding: 8px 16px; font-size: 12px;" onclick="markAsSold(${l.id})">✅ Mark Sold</button>`;
+  ? `<button class="btn-outline-accent" style="padding: 8px 16px; font-size: 12px;" onclick="reactivateListing(${l.id})"><i class="fa-solid fa-rotate"></i> Reactivate</button>`
+  : `<button class="btn-outline-accent" style="padding: 8px 16px; font-size: 12px;" onclick="markAsSold(${l.id})"><i class="fa-solid fa-circle-check"></i> Mark Sold</button>`;
   const analyticsHtml = `
     <div class="listing-analytics">
-      <span>👁 ${l.views || 0} views</span>
-      <span>💬 ${l.whatsappClicks || 0} inquiries</span>
-      ${l.reports ? `<span style="color: var(--red);">🚩 ${l.reports} reports</span>` : ''}
+      <span><i class="fa-solid fa-eye"></i> ${l.views || 0} views</span>
+      <span><i class="fa-solid fa-comment"></i> ${l.whatsappClicks || 0} inquiries</span>
+    ${l.reports ? `<span style="color: var(--red);"><i class="fa-solid fa-flag"></i> ${l.reports} reports</span>` : ''}
     </div>
   `;
 
-  return `
+
+return `
     <div class="account-card" id="listing-${l.id}">
       ${imageHtml}
       <div class="card-info">
@@ -793,11 +853,11 @@ function renderMyListingCard(l) {
           <h3>${escapeHtml(l.title)}</h3>
           ${statusBadge}
         </div>
-        <p class="seller-name">🛡 Seller: ${escapeHtml(l.sellerName)}</p>
+       <p class="seller-name"><i class="fa-solid fa-shield-halved"></i> Seller: ${escapeHtml(l.sellerName)}</p>
         <div class="stats">
           ${starsHtml}
-          <span>🎨 ${l.skinsCount} Skins</span>
-          <span>🏆 ${(l.points || 0).toLocaleString()} pts</span>
+          <span><i class="fa-solid fa-palette"></i> ${l.skinsCount} Skins</span>
+          <span><i class="fa-solid fa-trophy"></i> ${(l.points || 0).toLocaleString()} pts</span>
         </div>
         <p class="highlight-skins">${escapeHtml(l.highlightSkins).split(',').map(s => s.trim()).join(' • ')}</p>
         ${analyticsHtml}
@@ -809,13 +869,13 @@ function renderMyListingCard(l) {
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             ${statusBtn}
-            <button class="btn-outline-accent" style="padding: 8px 16px; font-size: 12px;" onclick="editListing(${l.id})">✏️ Edit</button>
-            <button class="btn-cancel" style="border-color: var(--red); color: var(--red); padding: 8px 16px; font-size: 12px;" onclick="deleteOneListing(${l.id})">🗑️ Delete</button>
+            <button class="btn-outline-accent" style="padding: 8px 16px; font-size: 12px;" onclick="editListing(${l.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+            <button class="btn-cancel" style="border-color: var(--red); color: var(--red); padding: 8px 16px; font-size: 12px;" onclick="deleteOneListing(${l.id})"><i class="fa-solid fa-trash"></i> Delete</button>
           </div>
         </div>
       </div>
     </div>
-  `;
+`;
 }
 
 // =============================================
@@ -841,14 +901,14 @@ function renderPriceHistory(listing) {
   }
   return `
     <div class="price-history">
-      <h4>📈 Price History</h4>
-      ${listing.priceHistory.map((h, i) => `
+      <h4><i class="fa-solid fa-chart-line"></i> Price History</h4>
+    ${listing.priceHistory.map((h, i) => `
         <div class="price-history-row ${i === listing.priceHistory.length - 1 ? 'current' : ''}">
           <span>${formatDate(h.date)}</span>
           <span class="${i > 0 && h.price < listing.priceHistory[i-1].price ? 'price-down' : ''}">
             ${formatPrice(h.price)}
-            ${i > 0 && h.price < listing.priceHistory[i-1].price ? ' 📉' : ''}
-            ${i > 0 && h.price > listing.priceHistory[i-1].price ? ' 📈' : ''}
+            ${i > 0 && h.price < listing.priceHistory[i-1].price ? ' <i class="fa-solid fa-arrow-trend-down"></i>' : ''}
+            ${i > 0 && h.price > listing.priceHistory[i-1].price ? ' <i class="fa-solid fa-arrow-trend-up"></i>' : ''}
           </span>
         </div>
       `).join('')}
@@ -877,19 +937,19 @@ function openListingDetail(id) {
   if (!overlay || !content) return;
 
   const imageHtml = l.imageUrl
-    ? `<img src="${l.imageUrl}" alt="${escapeHtml(l.title)}" class="detail-image">`
-    : `<div class="detail-image-placeholder">⚔️</div>`;
-  const starsHtml = l.stars ? `<span class="detail-stat">⭐ ${l.stars} Stars</span>` : '';
+  ? `<img src="${l.imageUrl}" alt="${escapeHtml(l.title)}" class="detail-image">`
+  : `<div class="detail-image-placeholder"><i class="fa-solid fa-shield-halved"></i></div>`;
+  const starsHtml = l.stars ? `<span class="detail-stat"><i class="fa-solid fa-star"></i> ${l.stars} Stars</span>` : '';
   const favClass = isFavorited(l.id) ? 'favorited' : '';
-  const favText = isFavorited(l.id) ? '❤️ Saved' : '🤍 Save to Wishlist';
+  const favText = isFavorited(l.id) ? '<i class="fa-solid fa-heart"></i> Saved' : '<i class="fa-regular fa-heart"></i> Save to Wishlist';
   const priceDropHtml = hasPriceDropped(l) 
-    ? `<span class="detail-price-drop">📉 ${getPriceDropPercent(l)}% OFF original price!</span>` 
-    : '';
+  ? `<span class="detail-price-drop"><i class="fa-solid fa-arrow-trend-down"></i> ${getPriceDropPercent(l)}% OFF original price!</span>` 
+  : '';
 
   content.innerHTML = `
     <div class="detail-header">
       <h2>${escapeHtml(l.title)}</h2>
-      <button class="modal-close" onclick="closeListingDetailModal()" aria-label="Close">✕</button>
+      <button class="modal-close" onclick="closeListingDetailModal()" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="detail-body">
       <div class="detail-image-wrap">
@@ -898,17 +958,17 @@ function openListingDetail(id) {
       </div>
       <div class="detail-info">
         <div class="detail-seller">
-          <span>🛡 ${escapeHtml(l.sellerName)}</span>
-          <span class="detail-views">👁 ${l.views || 0} views</span>
+          <span><i class="fa-solid fa-shield-halved"></i> ${escapeHtml(l.sellerName)}</span>
+          <span class="detail-views"><i class="fa-solid fa-eye"></i> ${l.views || 0} views</span>
         </div>
         <div class="detail-stats">
           ${starsHtml}
-          <span class="detail-stat">🎨 ${l.skinsCount} Skins</span>
-          <span class="detail-stat">🏆 ${(l.points || 0).toLocaleString()} pts</span>
+          <span class="detail-stat"><i class="fa-solid fa-palette"></i> ${l.skinsCount} Skins</span>
+          <span class="detail-stat"><i class="fa-solid fa-trophy"></i> ${(l.points || 0).toLocaleString()} pts</span>
         </div>
         <div class="detail-skins">
           <h4>Highlight Skins</h4>
-          <p>${escapeHtml(l.highlightSkins).split(',').map(s => `<span class="skin-tag">${s.trim()}</span>`).join('')}</p>
+    <p>${escapeHtml(l.highlightSkins).split(',').map(s => `<span class="skin-tag">${s.trim()}</span>`).join('')}</p>
         </div>
         ${priceDropHtml}
         ${renderPriceHistory(l)}
@@ -922,13 +982,13 @@ function openListingDetail(id) {
         <div class="detail-actions">
           <a href="https://wa.me/${sanitizePhone(l.whatsapp)}?text=${encodeURIComponent('Hi, I am interested in your MLBB account: ' + l.title)}" 
              target="_blank" class="buy-btn detail-buy-btn" onclick="trackWhatsAppClick(${l.id}, event)">
-            💬 Contact Seller on WhatsApp
+            <i class="fa-brands fa-whatsapp"></i> Contact Seller on WhatsApp
           </a>
           <button class="btn-outline-accent detail-fav-btn ${favClass}" onclick="toggleFavorite(${l.id}); openListingDetail(${l.id});">
             ${favText}
           </button>
           <button class="btn-cancel detail-report-btn" onclick="reportListing(${l.id}); openListingDetail(${l.id});" ${hasUserReported(l.id) ? 'disabled' : ''}>
-            ${hasUserReported(l.id) ? '✓ Reported' : '🚩 Report Listing'}
+            ${hasUserReported(l.id) ? '<i class="fa-solid fa-check"></i> Reported' : '<i class="fa-solid fa-flag"></i> Report Listing'}
           </button>
         </div>
       </div>
@@ -1062,7 +1122,7 @@ function editListing(id) {
 
   form.setAttribute('data-edit-id', id);
   const submitBtn = document.getElementById('submitBtn');
-  if (submitBtn) submitBtn.textContent = '💾 Save Changes';
+  if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
 
   openModal();
 }
@@ -1255,6 +1315,7 @@ function handleLogin(e) {
     updateNavAuth();
     showToast('Welcome back, ' + (user.fullName || user.username) + '!', 'success');
     showPage('home');
+  initSlidingUnderline();
   } else {
     showToast('Invalid email/username or password.', 'error');
   }
@@ -1350,8 +1411,8 @@ function loadProfile() {
   const username = document.getElementById('profileUsername');
 
   const initials = fullUser.fullName
-    ? fullUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    : (fullUser.username ? fullUser.username.slice(0, 2).toUpperCase() : 'U');
+  ? fullUser.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+  : (fullUser.username ? fullUser.username.slice(0, 2).toUpperCase() : 'U');
 
   if (avatar) avatar.textContent = initials;
   if (name) name.textContent = fullUser.fullName || fullUser.username || 'User';
@@ -1586,3 +1647,36 @@ function getSampleListings() {
     },
   ];
 }
+
+// ===== SLIDING UNDERLINE =====
+function initSlidingUnderline() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const underline = document.querySelector('.nav-underline');
+    
+    if (!underline || navLinks.length === 0) return;
+    
+    function moveUnderlineTo(link) {
+        underline.style.width = link.offsetWidth + 'px';
+        underline.style.left = link.offsetLeft + 'px';
+    }
+    
+    // Move to active link on init
+    const activeLink = document.querySelector('.nav-links a.active');
+    if (activeLink) moveUnderlineTo(activeLink);
+    
+    // Move on hover
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => moveUnderlineTo(link));
+    });
+    
+    // Return to active on mouse leave from nav-links container
+    const navLinksContainer = document.querySelector('.nav-links');
+    navLinksContainer.addEventListener('mouseleave', () => {
+        const currentActive = document.querySelector('.nav-links a.active');
+        if (currentActive) moveUnderlineTo(currentActive);
+    });
+}
+
+// ===== SMOOTH PAGE TRANSITIONS =====
+
+// Initialize on DOM ready
