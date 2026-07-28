@@ -87,6 +87,7 @@
    	display: flex;
    	align-items: center;
    	justify-content: center;
+	opacity: 0;
    	border-radius: 50%;
    	font-family: 'Gideon Roman', serif;
    	font-weight: bold;
@@ -103,6 +104,7 @@
 
    @keyframes floatUp {
    	0%   { transform: translateY(0) scale(0.5) rotate(0deg); opacity:0; }
+	5%	 { opacity: 0.5;
    	10%  { opacity: 0.5; }
    	90%  { opacity: 0.5; }
    	100% { transform: translateY(-120vh) scale(1) rotate(360deg); opacity:0; }
