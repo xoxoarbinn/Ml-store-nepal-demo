@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
   <base target="_blank">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -27,11 +27,8 @@
   <nav id="nav">
     <a href="#" class="nav-logo" onclick="showPage('home'); return false;" style="text-decoration:none">
       <div class="nav-logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-          <polyline points="2 17 12 22 22 17"></polyline>
-          <polyline points="2 12 12 17 22 12"></polyline>
-        </svg>
+
+        <img src="logo.png" alt="ML">
       </div>
       <p>ML-Store Nepal</p>
     </a>
@@ -40,6 +37,7 @@
       <a href="#" onclick="showPage('marketplace'); return false;">Marketplace</a>
       <a href="#" onclick="showPage('how-to-buy'); return false;">How to Buy</a>
       <a href="#" onclick="showPage('safety'); return false;">Safety</a>
+      <div class="nav-underline"></div>
     </div>
     <div class="nav-actions" id="navAuth">
       <button class="btn-login" onclick="showPage('login')">Login</button>
@@ -151,7 +149,7 @@
 
     <section class="featured-section">
       <div class="featured-header">
-        <h2>🔥 Featured Accounts</h2>
+        <h2><i class="fa-solid fa-fire"></i> Featured Accounts</h2>
         <a href="#" class="btn-outline-accent" onclick="showPage('marketplace'); return false;">View All</a>
       </div>
       <div class="id-forsale" id="featuredGrid">
@@ -245,7 +243,7 @@
           </div>
         </div>
         <div class="guide-tip">
-          <h4>💡 Pro Tip</h4>
+          <h4><i class="fa-solid fa-lightbulb"></i> Pro Tip</h4>
           <p>Always ask for a screen recording of the account lobby and inventory before making any payment. If a deal seems too good to be true, it probably is. Stick to verified sellers and use escrow whenever possible.</p>
         </div>
       </section>
@@ -467,12 +465,8 @@
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand-wrap">
-          <div class="footer-logo">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-              <polyline points="2 17 12 22 22 17"></polyline>
-              <polyline points="2 12 12 17 22 12"></polyline>
-            </svg>
+          <div class="nav-logo-icon">
+            <img src="logo.png" alt="ML">
           </div>
           <div>
             <h3>ML-Store Nepal</h3>
@@ -630,7 +624,7 @@
         <button class="modal-close" onclick="closeAuthModal()" aria-label="Close">✕</button>
       </div>
       <div class="modal-body" style="text-align:center; padding: 40px 24px;">
-        <div class="auth-modal-icon">🔒</div>
+        <div class="auth-modal-icon"><i class="fa-solid fa-lock"></i></div>
         <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px;">Login Required</h3>
         <p style="color: #aaa; margin-bottom: 28px; line-height: 1.6;">You need to be logged in to buy or sell accounts on ML-Store Nepal. Join our community of trusted traders today.</p>
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
@@ -652,7 +646,7 @@
 
   <!-- TOAST NOTIFICATION -->
   <div id="toast" class="toast">
-    <span id="toastIcon">✅</span>
+    <span id="toastIcon"><i class="fa-solid fa-check"></i></span>
     <span id="toastMsg">Notification</span>
   </div>
 
