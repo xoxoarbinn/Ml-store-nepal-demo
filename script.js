@@ -112,11 +112,13 @@ function initStorage() {
 //  SPA PAGE SWITCHING
 // =============================================
 function showPage(pageName) {
-  const currentPage = document.querySelector('.page:not(.hidden)');
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.add('hidden');
+  });
   const target = document.getElementById('page-' + pageName);
-  if (!target || currentPage === target) return;
-
-  // Update active nav link
+  if (target) {
+    target.classList.remove('hidden');
+  }
   document.querySelectorAll('.nav-links a').forEach(link => {
     link.classList.remove('active');
     const onclick = link.getAttribute('onclick') || '';
@@ -124,66 +126,6 @@ function showPage(pageName) {
       link.classList.add('active');
     }
   });
-
-  // Update sliding underline position
-  const activeLink = document.querySelector('.nav-links a.active');
-  const underline = document.querySelector('.nav-underline');
-  if (activeLink && underline) {
-    underline.style.width = activeLink.offsetWidth + 'px';
-    underline.style.left = activeLink.offsetLeft + 'px';
-  }
-
-  // Smooth page transition
-  if (currentPage) {
-    // Fade out current page
-    currentPage.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-    currentPage.style.opacity = '0';
-    currentPage.style.transform = 'translateY(8px)';
-
-    setTimeout(() => {
-      currentPage.classList.add('hidden');
-      currentPage.style.transition = '';
-      currentPage.style.opacity = '';
-      currentPage.style.transform = '';
-
-      // Prepare next page (hidden but positioned for entrance)
-      target.classList.remove('hidden');
-      target.style.opacity = '0';
-      target.style.transform = 'translateY(12px)';
-
-      // Force reflow then animate in with rAF
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          target.style.transition = 'opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
-          target.style.opacity = '1';
-          target.style.transform = 'translateY(0)';
-
-          setTimeout(() => {
-            target.style.transition = '';
-            target.style.opacity = '';
-            target.style.transform = '';
-          }, 350);
-        });
-      });
-    }, 250);
-  } else {
-    target.classList.remove('hidden');
-    target.style.opacity = '0';
-    target.style.transform = 'translateY(12px)';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        target.style.transition = 'opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
-        target.style.opacity = '1';
-        target.style.transform = 'translateY(0)';
-        setTimeout(() => {
-          target.style.transition = '';
-          target.style.opacity = '';
-          target.style.transform = '';
-        }, 350);
-      });
-    });
-  }
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (pageName === 'marketplace') loadListings();
@@ -192,7 +134,6 @@ function showPage(pageName) {
   if (pageName === 'profile') loadProfile();
   if (pageName === 'wishlist') loadWishlist();
 }
-
 
 // =============================================
 //  MOBILE MENU
@@ -371,7 +312,10 @@ function showToast(message, type = 'success') {
 document.addEventListener('DOMContentLoaded', () => {
   initStorage();
   updateNavAuth();
-  showPage('home');
+  loadListings().then(() => {
+    showPage('home');
+    initSlidingUnderline();
+  });
 
   const overlay = document.getElementById('modal-overlay');
   if (overlay) overlay.addEventListener('click', handleOverlayClick);
@@ -1315,7 +1259,6 @@ function handleLogin(e) {
     updateNavAuth();
     showToast('Welcome back, ' + (user.fullName || user.username) + '!', 'success');
     showPage('home');
-  initSlidingUnderline();
   } else {
     showToast('Invalid email/username or password.', 'error');
   }
@@ -1676,7 +1619,3 @@ function initSlidingUnderline() {
         if (currentActive) moveUnderlineTo(currentActive);
     });
 }
-
-// ===== SMOOTH PAGE TRANSITIONS =====
-
-// Initialize on DOM ready
